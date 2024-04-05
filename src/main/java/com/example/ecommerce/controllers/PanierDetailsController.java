@@ -73,11 +73,15 @@ public class PanierDetailsController {
     public ResponseEntity<List<CommandByDateDTO>> getGroupingByDateCommandeByUser(@PathVariable Long idUser) {
         Map<LocalDateTime, List<PanierDetails>> groupingByDate = panierDetailsService.getGroupingByDateCommandeByUser(idUser);
         if (!groupingByDate.isEmpty()) {
+            double somme=0;
             List<CommandByDateDTO> commandByDateDTOList = new ArrayList<>();
             for (Map.Entry<LocalDateTime, List<PanierDetails>> entry : groupingByDate.entrySet()) {
                 LocalDateTime dateCommande = entry.getKey();
                 List<PanierDetails> panierDetailsList = entry.getValue();
-                CommandByDateDTO commandByDateDTO = new CommandByDateDTO(dateCommande, panierDetailsList);
+                for(PanierDetails panierDetails : panierDetailsList){
+                    somme+= panierDetails.getQuantite()*panierDetails.getProduit().getPrice();
+                }
+                CommandByDateDTO commandByDateDTO = new CommandByDateDTO(dateCommande, panierDetailsList,somme);
                 commandByDateDTOList.add(commandByDateDTO);
             }
             return ResponseEntity.ok(commandByDateDTOList);

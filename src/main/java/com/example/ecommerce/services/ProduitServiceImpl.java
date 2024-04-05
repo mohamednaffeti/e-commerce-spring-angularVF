@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -47,7 +48,6 @@ public class ProduitServiceImpl implements IProduitService {
         produit.setDescription(produitDTO.getDescription());
         produit.setPrice(produitDTO.getPrice());
         produit.setReference(produitDTO.getReference());
-        produit.setImage(produitDTO.getImage());
         produit.setVendeur(vendeur);
         produit.setCategory(categorie);
         produit.setCreatedAt(LocalDateTime.now());
@@ -66,16 +66,49 @@ public class ProduitServiceImpl implements IProduitService {
         return savedProduit;
     }
 
-    private String saveImage(MultipartFile image) {
-        try {
-            String imageName = UUID.randomUUID() + image.getOriginalFilename();
-            String imagePath = "fichiers/" + imageName;
-            File imageFile = new File(imagePath);
-            FileUtils.writeByteArrayToFile(imageFile, image.getBytes());
-            return imageName;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    @Override
+    public List<Produit> getAllProducts() {
+        return produitRepository.findAll();
     }
+
+    @Override
+    public List<Produit> getAllProductsByCategory(Long categoryId) {
+        return produitRepository.findByCategoryIdCategory(categoryId);
+    }
+
+    @Override
+    public List<Produit> getAllProductsByVendeur(Long vendeurId) {
+        return produitRepository.findByVendeurId(vendeurId);
+    }
+
+    @Override
+    public Produit updateProduit(Long produitId, ProduitDTO produitDTO) {
+        Produit existingProduit = produitRepository.findById(produitId)
+                .orElseThrow(() -> new DataNotFoundException("Product not found"));
+
+
+        existingProduit.setName(produitDTO.getName());
+        existingProduit.setDescription(produitDTO.getDescription());
+        existingProduit.setPrice(produitDTO.getPrice());
+        existingProduit.setReference(produitDTO.getReference());
+
+        if (existingProduit.getStock() != null && produitDTO.getQuantite() != existingProduit.getStock().getQuantity()) {
+            Stock stock = existingProduit.getStock();
+            stock.setQuantity(produitDTO.getQuantite());
+            stock.setAvailable(stock.getQuantity() != 0);
+            stockRepository.save(stock);
+        }
+        return produitRepository.save(existingProduit);
+    }
+
+    @Override
+    @Transactional
+    public void deleteProduit(Long produitId) {
+        Produit existingProduit = produitRepository.findById(produitId)
+                .orElseThrow(() -> new DataNotFoundException("Product not found"));
+
+        produitRepository.delete(existingProduit);
+    }
+
+
 }

@@ -25,8 +25,10 @@ public class UtilisateurResponseDTO {
     private LocalDate creationDate = LocalDate.now();
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    private Image imageUser;
     private CoordonneesBancaires coordonneesBancaires;
     private String adresseLivraison;
+
 
     public UtilisateurResponseDTO(Utilisateur utilisateur) {
         this.id = utilisateur.getId();
@@ -38,6 +40,7 @@ public class UtilisateurResponseDTO {
         this.role = determineRole(utilisateur);
         this.creationDate = utilisateur.getCreationDate();
         this.gender = utilisateur.getGender();
+        this.imageUser=utilisateur.getImage();
         if (utilisateur instanceof Vendeur) {
             this.adresseLivraison=((Vendeur) utilisateur).getAdresseLivraison();
             this.coordonneesBancaires = ((Vendeur) utilisateur).getCoordonneesBancaires();

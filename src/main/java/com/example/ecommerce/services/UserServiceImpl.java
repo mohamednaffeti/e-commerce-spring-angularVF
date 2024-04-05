@@ -70,11 +70,15 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         List<CommandByDateDTO> getCommandByUser(Long idUser) {
             Map<LocalDateTime, List<PanierDetails>> groupingByDate = panierDetailsService.getGroupingByDateCommandeByUser(idUser);
             List<CommandByDateDTO> commandByDateDTOList = null;
+            double somme = 0;
             if (!groupingByDate.isEmpty()) {
                 commandByDateDTOList = new ArrayList<>();
                 for (Map.Entry<LocalDateTime, List<PanierDetails>> entry : groupingByDate.entrySet()) {LocalDateTime dateCommande = entry.getKey();
                  List<PanierDetails> panierDetailsList = entry.getValue();
-                    CommandByDateDTO commandByDateDTO = new CommandByDateDTO(dateCommande, panierDetailsList);
+                    for(PanierDetails panierDetails : panierDetailsList){
+                        somme+= panierDetails.getQuantite()*panierDetails.getProduit().getPrice();
+                    }
+                    CommandByDateDTO commandByDateDTO = new CommandByDateDTO(dateCommande, panierDetailsList,somme);
                     commandByDateDTOList.add(commandByDateDTO);
         }
     }
@@ -100,5 +104,10 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         else{
             throw new DataNotFoundException("Invalid user type for: " + username);
         }
+    }
+
+    @Override
+    public Utilisateur updateUser(Utilisateur existingUser) {
+        return userRepository.save(existingUser);
     }
 }

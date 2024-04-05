@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 
 @Entity
@@ -38,6 +38,6 @@ public abstract class Utilisateur {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-
-
+    @OneToOne(mappedBy = "utilisateur", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Image image;
 }

@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/produits")
@@ -25,17 +26,9 @@ public class ProduitController {
 
     public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/webapp/images";
 
-    @PostMapping(value = "/{vendeurId}/{categoryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Produit> addProduct(@PathVariable Long vendeurId, @PathVariable Long categoryId, @RequestParam("name") String name,
-                                              @RequestParam("description") String description, @RequestParam("price") double price,
-                                              @RequestParam("reference") String reference, @RequestParam("quantite") int quantite,
-                                               @RequestParam("image") MultipartFile image) throws IOException {
+    @PostMapping(value = "/{vendeurId}/{categoryId}")
+    public ResponseEntity<Produit> addProduct(@PathVariable Long vendeurId,@PathVariable Long categoryId,@RequestBody ProduitDTO produitDTO) throws IOException {
 
-        String originalFileName = image.getOriginalFilename();
-        Path fileNameAndPath = Paths.get(uploadDirectory, originalFileName);
-        Files.write(fileNameAndPath, image.getBytes());
-
-        ProduitDTO produitDTO = new ProduitDTO(name, description, price, reference,  quantite, originalFileName);
 
         Produit createdProduit = produitService.addProduct(vendeurId, categoryId, produitDTO);
         if (createdProduit != null) {
@@ -43,5 +36,34 @@ public class ProduitController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Produit>> getAllProducts() {
+        List<Produit> produits = produitService.getAllProducts();
+        return ResponseEntity.ok(produits);
+    }
+
+    @GetMapping("/getByCategory/{categoryId}")
+    public ResponseEntity<List<Produit>> getAllProductsByCategory(@PathVariable Long categoryId) {
+        List<Produit> produits = produitService.getAllProductsByCategory(categoryId);
+        return ResponseEntity.ok(produits);
+    }
+
+    @GetMapping("/getByVendeur/{vendeurId}")
+    public ResponseEntity<List<Produit>> getAllProductsByVendeur(@PathVariable Long vendeurId) {
+        List<Produit> produits = produitService.getAllProductsByVendeur(vendeurId);
+        return ResponseEntity.ok(produits);
+    }
+
+    @PutMapping("/update/{produitId}")
+    public ResponseEntity<Produit> updateProduit(@PathVariable Long produitId, @RequestBody ProduitDTO produitDTO) {
+        Produit updatedProduit = produitService.updateProduit(produitId, produitDTO);
+        return ResponseEntity.ok(updatedProduit);
+    }
+
+    @DeleteMapping("/delete/{produitId}")
+    public ResponseEntity<Void> deleteProduit(@PathVariable Long produitId) {
+        produitService.deleteProduit(produitId);
+        return ResponseEntity.noContent().build();
     }
 }

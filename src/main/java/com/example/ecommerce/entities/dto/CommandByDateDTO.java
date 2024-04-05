@@ -14,4 +14,5 @@ import java.util.List;
 public class CommandByDateDTO {
     private LocalDateTime dateCommande;
     List<PanierDetails> panierDetailsList;
+    private double sommeCommande;
 }

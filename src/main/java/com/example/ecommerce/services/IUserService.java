@@ -12,4 +12,6 @@ public interface IUserService {
     void deleteUser(Long id);
     Utilisateur findById(Long id);
     UserDetails loadUserByUsername(String username);
+
+    Utilisateur updateUser(Utilisateur existingUser);
 }

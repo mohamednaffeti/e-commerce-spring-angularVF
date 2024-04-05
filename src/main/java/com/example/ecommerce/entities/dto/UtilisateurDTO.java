@@ -1,6 +1,7 @@
 package com.example.ecommerce.entities.dto;
 
 import com.example.ecommerce.entities.CoordonneesBancaires;
+import com.example.ecommerce.entities.Image;
 import com.example.ecommerce.entities.PanierDetails;
 import com.example.ecommerce.entities.Produit;
 import com.example.ecommerce.entities.enumerations.Gender;
@@ -30,9 +31,11 @@ public class UtilisateurDTO {
     LocalDate creationDate;
     String adresseLivraison;
     Gender gender;
+     Image image;
     CoordonneesBancaires coordonneesBancaires;
     List<GrantedAuthority> authorities;
     List<CommandByDateDTO> commandListUser;
     List<PanierDetails> panierListUser;
     List<Produit> mesProduits;
+
 }

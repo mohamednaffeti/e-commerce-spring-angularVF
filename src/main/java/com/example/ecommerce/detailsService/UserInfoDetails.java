@@ -33,6 +33,7 @@ public class UserInfoDetails implements UserDetails {
     List<CommandByDateDTO> commandesUser;
     List<PanierDetails> panierUser;
     List<Produit> mesProduits;
+    Image image;
     public UserInfoDetails(Client client,List<CommandByDateDTO> commandesUser,List<PanierDetails> panierUser){
         id=client.getId();
         userName= client.getUserName();
@@ -48,6 +49,7 @@ public class UserInfoDetails implements UserDetails {
         authorities = Collections.singletonList(new SimpleGrantedAuthority(client.getClass().getSimpleName()));
         this.commandesUser=commandesUser;
         this.panierUser=panierUser;
+        this.image=client.getImage();
     }
     public UserInfoDetails(Vendeur vendeur, List<CommandByDateDTO> commandesUser, List<PanierDetails> panierUser,List<Produit> mesProduits){
         id=vendeur.getId();
@@ -65,6 +67,7 @@ public class UserInfoDetails implements UserDetails {
         this.commandesUser=commandesUser;
         this.panierUser=panierUser;
         this.mesProduits=mesProduits;
+        this.image=vendeur.getImage();
     }
     public UserInfoDetails(Admin admin){
         id=admin.getId();
@@ -78,6 +81,7 @@ public class UserInfoDetails implements UserDetails {
         gender = admin.getGender();
         role = Role.Admin;
         authorities = Collections.singletonList(new SimpleGrantedAuthority(admin.getClass().getSimpleName()));
+        this.image=admin.getImage();
     }
     @Override
     public List<GrantedAuthority> getAuthorities() {

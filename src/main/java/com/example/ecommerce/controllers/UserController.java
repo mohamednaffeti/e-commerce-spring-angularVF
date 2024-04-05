@@ -97,7 +97,34 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<Utilisateur> updateUser(@PathVariable Long userId, @RequestBody UtilisateurRequestDTO userRequest) {
 
+        Utilisateur existingUser = userService.findById(userId);
+        if (existingUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        existingUser.setUserName(userRequest.getUserName());
+        existingUser.setFirstName(userRequest.getFirstName());
+        existingUser.setLastName(userRequest.getLastName());
+        existingUser.setEmail(userRequest.getEmail());
+        existingUser.setPhoneNumber(userRequest.getPhoneNumber());
+        existingUser.setPassword(userRequest.getPassword());
+        existingUser.setCreationDate(userRequest.getCreationDate());
+        existingUser.setGender(userRequest.getGender());
+
+        Role role = userRequest.getRole();
+        if (role == Role.Client && existingUser instanceof Client) {
+            Client client = (Client) existingUser;
+            client.setAdresseLivraison(userRequest.getAdresseLivraison());
+        } else if (role == Role.Vendeur && existingUser instanceof Vendeur) {
+            Vendeur vendeur = (Vendeur) existingUser;
+            vendeur.setAdresseLivraison(userRequest.getAdresseLivraison());
+            vendeur.setCoordonneesBancaires(userRequest.getCoordonneesBancaires());
+        }
+        Utilisateur updatedUser = userService.updateUser(existingUser);
+        return ResponseEntity.ok(updatedUser);
+    }
 
     @GetMapping("/api/user")
     public ResponseEntity<UtilisateurDTO> getUserDetails(@RequestHeader("Authorization") String authorizationHeader) {
@@ -116,11 +143,13 @@ public class UserController {
         utilisateur.setCreationDate(userInfoDetails.getCreationDate());
         utilisateur.setAuthorities(userInfoDetails.getAuthorities());
         utilisateur.setAdresseLivraison(userInfoDetails.getAdresseLivraison());
+        utilisateur.setImage(userInfoDetails.getImage());
         utilisateur.setCoordonneesBancaires(userInfoDetails.getCoordonneesBancaires());
         utilisateur.setGender(userInfoDetails.getGender());
         utilisateur.setCommandListUser(userInfoDetails.getCommandesUser());
         utilisateur.setPanierListUser(userInfoDetails.getPanierUser());
         utilisateur.setMesProduits(userInfoDetails.getMesProduits());
+
         return ResponseEntity.ok(utilisateur);
     }
 }

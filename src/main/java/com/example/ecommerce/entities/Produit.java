@@ -22,7 +22,6 @@ public class Produit implements Serializable {
     private String description;
     private double price;
     private String reference;
-    private String image;
     private LocalDateTime createdAt;
 
 
@@ -42,4 +41,6 @@ public class Produit implements Serializable {
     @JsonIgnore
     private List<PanierDetails> panierDetails;
 
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private List<Image> images;
 }

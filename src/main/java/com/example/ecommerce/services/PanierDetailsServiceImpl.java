@@ -66,13 +66,12 @@ public class PanierDetailsServiceImpl implements IPanierDetailsService {
 
             if(utilisateur instanceof Client){
                 return panierDetailsRepository.findByClientId(idClient);
-            }else if(utilisateur instanceof Vendeur){
-                return panierDetailsRepository.findByVendeurId(idClient);
             }else{
-                throw new DataNotFoundException("should be a client or Vendor");
+                return panierDetailsRepository.findByVendeurId(idClient);
+            }
 
         }
-    }
+
 
    @Override
     public List<PanierDetails> getAllByUserNonCommander(Long idUser) {

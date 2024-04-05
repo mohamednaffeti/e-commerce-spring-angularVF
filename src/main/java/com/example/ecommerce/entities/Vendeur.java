@@ -28,5 +28,4 @@ public class Vendeur extends Utilisateur {
     @JsonIgnore
     private List<PanierDetails> panierDetails;
 
-
 }
