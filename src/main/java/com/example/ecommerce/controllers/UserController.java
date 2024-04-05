@@ -118,6 +118,9 @@ public class UserController {
         utilisateur.setAdresseLivraison(userInfoDetails.getAdresseLivraison());
         utilisateur.setCoordonneesBancaires(userInfoDetails.getCoordonneesBancaires());
         utilisateur.setGender(userInfoDetails.getGender());
+        utilisateur.setCommandListUser(userInfoDetails.getCommandesUser());
+        utilisateur.setPanierListUser(userInfoDetails.getPanierUser());
+        utilisateur.setMesProduits(userInfoDetails.getMesProduits());
         return ResponseEntity.ok(utilisateur);
     }
 }

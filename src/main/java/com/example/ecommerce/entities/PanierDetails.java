@@ -2,6 +2,7 @@ package com.example.ecommerce.entities;
 
 import com.example.ecommerce.entities.enumerations.EtatStatus;
 import com.example.ecommerce.entities.enumerations.TypePaiement;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

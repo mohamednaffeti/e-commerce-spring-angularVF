@@ -1,9 +1,7 @@
 package com.example.ecommerce.detailsService;
 
-import com.example.ecommerce.entities.Admin;
-import com.example.ecommerce.entities.Client;
-import com.example.ecommerce.entities.CoordonneesBancaires;
-import com.example.ecommerce.entities.Vendeur;
+import com.example.ecommerce.entities.*;
+import com.example.ecommerce.entities.dto.CommandByDateDTO;
 import com.example.ecommerce.entities.enumerations.Gender;
 import com.example.ecommerce.entities.enumerations.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +30,10 @@ public class UserInfoDetails implements UserDetails {
     Gender gender;
     CoordonneesBancaires coordonneesBancaires;
     List<GrantedAuthority> authorities;
-    public UserInfoDetails(Client client){
+    List<CommandByDateDTO> commandesUser;
+    List<PanierDetails> panierUser;
+    List<Produit> mesProduits;
+    public UserInfoDetails(Client client,List<CommandByDateDTO> commandesUser,List<PanierDetails> panierUser){
         id=client.getId();
         userName= client.getUserName();
         password= client.getPassword();
@@ -45,8 +46,10 @@ public class UserInfoDetails implements UserDetails {
         role = Role.Client;
         adresseLivraison = client.getAdresseLivraison();
         authorities = Collections.singletonList(new SimpleGrantedAuthority(client.getClass().getSimpleName()));
+        this.commandesUser=commandesUser;
+        this.panierUser=panierUser;
     }
-    public UserInfoDetails(Vendeur vendeur){
+    public UserInfoDetails(Vendeur vendeur, List<CommandByDateDTO> commandesUser, List<PanierDetails> panierUser,List<Produit> mesProduits){
         id=vendeur.getId();
         userName= vendeur.getUserName();
         password= vendeur.getPassword();
@@ -59,6 +62,9 @@ public class UserInfoDetails implements UserDetails {
         role = Role.Vendeur;
         coordonneesBancaires = vendeur.getCoordonneesBancaires();
         authorities = Collections.singletonList(new SimpleGrantedAuthority(vendeur.getClass().getSimpleName()));
+        this.commandesUser=commandesUser;
+        this.panierUser=panierUser;
+        this.mesProduits=mesProduits;
     }
     public UserInfoDetails(Admin admin){
         id=admin.getId();

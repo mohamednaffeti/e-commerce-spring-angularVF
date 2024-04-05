@@ -8,6 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface StockRepository extends JpaRepository<Stock,Long> {
-    Stock findByProduitIdProduit(Long produitId);
 
+
+
+    Stock findByProduitIdProduit(Long idProduit);
 }

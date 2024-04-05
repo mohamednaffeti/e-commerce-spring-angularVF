@@ -1,6 +1,8 @@
 package com.example.ecommerce.entities.dto;
 
 import com.example.ecommerce.entities.CoordonneesBancaires;
+import com.example.ecommerce.entities.PanierDetails;
+import com.example.ecommerce.entities.Produit;
 import com.example.ecommerce.entities.enumerations.Gender;
 import com.example.ecommerce.entities.enumerations.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,4 +32,7 @@ public class UtilisateurDTO {
     Gender gender;
     CoordonneesBancaires coordonneesBancaires;
     List<GrantedAuthority> authorities;
+    List<CommandByDateDTO> commandListUser;
+    List<PanierDetails> panierListUser;
+    List<Produit> mesProduits;
 }

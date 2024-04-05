@@ -86,7 +86,7 @@ public class PanierDetailsController {
         }
     }
     @GetMapping("/addCommande/{idUser}")
-    public ResponseEntity<SommeResponseDTO> getSumOfCommande(@PathVariable Long idUser) {
+    public ResponseEntity<SommeResponseDTO> addCommande(@PathVariable Long idUser) {
         return ResponseEntity.ok(SommeResponseDTO.builder().somme(panierDetailsService.addCommande(idUser)).build());
     }
 }
